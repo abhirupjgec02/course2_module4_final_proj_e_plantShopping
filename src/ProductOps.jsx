@@ -5,6 +5,7 @@ import { useDispatch } from "react-redux";
 let ProductOps = ({ plantsArray, addedToCart, setAddedToCart }) => {
     const dispatch = useDispatch();
     const handleAddToCart = (plantItem) => {
+        plantItem.quantity = 1;
         setAddedToCart((prevState) => ({
             ...prevState,
             [plantItem.name]: true,
