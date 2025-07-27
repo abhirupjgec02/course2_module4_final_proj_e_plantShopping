@@ -3,7 +3,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { removeItem, updateQuantity } from './CartSlice';
 import './CartItem.css';
 
-const CartItem = ({ onContinueShopping }) => {
+const CartItem = ({ onContinueShopping, setAddedToCart }) => {
   const cart = useSelector(state => state.cart.items);
   const dispatch = useDispatch();
 
@@ -11,7 +11,7 @@ const CartItem = ({ onContinueShopping }) => {
   const calculateTotalAmount = () => {
     let totalShoppingAmount = 0;
     cart.forEach(item => {
-        let perItemCostInt = parseInt(item.cost.replace('$', ''), 10);
+        let perItemCostInt = parseFloat(item.cost.replace('$', ''));
         totalShoppingAmount += perItemCostInt * item.quantity;
     });
     return totalShoppingAmount;
@@ -30,17 +30,27 @@ const CartItem = ({ onContinueShopping }) => {
     if(item.quantity > 1){
         const updatedItem = {...item, quantity: item.quantity - 1};
         dispatch(updateQuantity(updatedItem));
+    } else {
+        handleRemove(item);
     }
   };
 
   const handleRemove = (item) => {
+    setAddedToCart((prevState) => ({
+            ...prevState,
+            [item.name]: false,
+        }));
     dispatch(removeItem(item));
   };
 
   // Calculate total cost based on quantity for an item
   const calculateTotalCost = (item) => {
-    let perItemCostInt = parseInt(item.cost.replace('$', ''), 10);
+    let perItemCostInt = parseFloat(item.cost.replace('$', ''));
     return perItemCostInt * item.quantity;
+  };
+
+  const handleCheckoutShopping = () => {
+      alert('Functionality to be added for future reference');
   };
 
   return (
@@ -68,7 +78,7 @@ const CartItem = ({ onContinueShopping }) => {
       <div className="continue_shopping_btn">
         <button className="get-started-button" onClick={(e) => handleContinueShopping(e)}>Continue Shopping</button>
         <br />
-        <button className="get-started-button1">Checkout</button>
+        <button className="get-started-button1" onClick={(e) => handleCheckoutShopping()}>Checkout</button>
       </div>
     </div>
   );
